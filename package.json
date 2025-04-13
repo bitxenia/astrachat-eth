@@ -1,0 +1,21 @@
+{
+  "name": "astrachat-eth",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "hardhat": "hardhat node",
+    "compile-contracts": "npx solc contracts/Chat.sol contracts/ChatFactory.sol --bin --abi -o contracts/out && mv contracts/out/contracts_Chat_sol_Chat.abi contracts/out/Chat.json && mv contracts/out/contracts_ChatFactory_sol_ChatFactory.abi contracts/out/ChatFactory.json && mv contracts/out/contracts_Chat_sol_Chat.bin contracts/out/Chat.bin && mv contracts/out/contracts_ChatFactory_sol_ChatFactory.bin contracts/out/ChatFactory.bin",
+    "deploy-contracts": "node contracts/utils/deploy.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "dotenv": "^16.5.0",
+    "hardhat": "^2.23.0"
+  },
+  "dependencies": {
+    "web3": "^4.16.0"
+  }
+}
