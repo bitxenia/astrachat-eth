@@ -1,0 +1,17 @@
+/src
+/contracts
+/node_modules
+.env*
+.DS_Store
+tsconfig.json
+tsup.config.ts
+
+/docs
+
+.github
+.gitattributes
+.prettierignore
+lint-staged.config.js
+.husky
+.eslintrc.js
+.prettierrc.json

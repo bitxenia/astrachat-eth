@@ -1,19 +1,30 @@
 {
-  "name": "astrachat-eth",
+  "name": "@bitxenia/astrachat-eth",
   "version": "0.0.1",
-  "main": "index.js",
+  "description": "Astrachat implementation on Ethereum",
+  "author": "Bitxenia",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bitxenia/astrachat-eth"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.mjs",
+  "types": "./dist/src/index.d.ts",
   "scripts": {
     "hardhat": "hardhat node",
+    "build": "tsc",
     "compile-contracts": "npx solc contracts/Chat.sol contracts/ChatFactory.sol --bin --abi -o contracts/out && mv contracts/out/contracts_Chat_sol_Chat.abi contracts/out/Chat.json && mv contracts/out/contracts_ChatFactory_sol_ChatFactory.abi contracts/out/ChatFactory.json && mv contracts/out/contracts_Chat_sol_Chat.bin contracts/out/Chat.bin && mv contracts/out/contracts_ChatFactory_sol_ChatFactory.bin contracts/out/ChatFactory.bin",
     "deploy-contracts": "node contracts/utils/deploy.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "devDependencies": {
     "dotenv": "^16.5.0",
-    "hardhat": "^2.23.0"
+    "hardhat": "^2.23.0",
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "web3": "^4.16.0"
