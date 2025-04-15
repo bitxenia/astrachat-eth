@@ -12,6 +12,13 @@ class ChatManagerImpl implements ChatManager {
     throw new Error("Method not implemented.");
   }
 
+  async listenToNewMessages(
+    chatName: string,
+    callback: (message: ChatMessage) => void
+  ): Promise<void> {
+    this.chatRepository.listenToNewMessages(chatName, callback);
+  }
+
   async createChat(chatName: string): Promise<void> {
     throw new Error("Method not implemented.");
   }

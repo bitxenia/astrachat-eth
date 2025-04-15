@@ -8,6 +8,12 @@ contract Chat {
         uint256 timestamp;
     }
 
+    event MessageSent(
+        address indexed sender,
+        string content,
+        uint256 timestamp
+    );
+
     Message[] public messages;
 
     function sendMessage(string memory _content) public {
@@ -17,6 +23,7 @@ contract Chat {
             timestamp: block.timestamp
         });
         messages.push(newMessage);
+        emit MessageSent(msg.sender, _content, block.timestamp);
     }
 
     function getMessages() public view returns (Message[] memory) {

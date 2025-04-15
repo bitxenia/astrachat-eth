@@ -7,6 +7,11 @@ export async function createChatManager(): Promise<ChatManager> {
 export interface ChatManager {
   start(): Promise<void>;
 
+  listenToNewMessages(
+    chatName: string,
+    callback: (message: ChatMessage) => void
+  ): Promise<void>;
+
   createChat(chatName: string): Promise<void>;
 
   sendMessage(chatName: string, message: string): Promise<void>;
