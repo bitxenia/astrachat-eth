@@ -17,7 +17,7 @@ class ChatManagerImpl implements ChatManager {
   }
 
   async sendMessage(chatName: string, message: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    await this.chatRepository.sendMessage(chatName, message);
   }
 
   async getMessages(chatName: string): Promise<ChatMessage[]> {

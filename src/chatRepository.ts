@@ -32,6 +32,22 @@ class ChatRepository {
       timestamp: message.timestamp,
     }));
   }
+
+  async sendMessage(chatName: string, message: string): Promise<void> {
+    const chatAddress = await this.chatFactoryInstance.methods
+      .chatNameToAddress(chatName)
+      .call();
+    const chatContractInstance = new web3.eth.Contract(
+      chatContractABI,
+      chatAddress
+    );
+
+    const accounts = await web3.eth.getAccounts();
+
+    await chatContractInstance.methods
+      .sendMessage(message)
+      .send({ from: accounts[0] });
+  }
 }
 
 export default ChatRepository;
