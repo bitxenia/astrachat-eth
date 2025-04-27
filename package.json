@@ -28,5 +28,8 @@
   },
   "dependencies": {
     "web3": "^4.16.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
