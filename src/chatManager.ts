@@ -14,7 +14,7 @@ class ChatManagerImpl implements ChatManager {
 
   async listenToNewMessages(
     chatName: string,
-    callback: (message: ChatMessage) => void
+    callback: (message: ChatMessage) => void,
   ): Promise<void> {
     this.chatRepository.listenToNewMessages(chatName, callback);
   }

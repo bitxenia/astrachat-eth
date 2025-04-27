@@ -9,7 +9,7 @@ export interface ChatManager {
 
   listenToNewMessages(
     chatName: string,
-    callback: (message: ChatMessage) => void
+    callback: (message: ChatMessage) => void,
   ): Promise<void>;
 
   createChat(chatName: string): Promise<void>;
