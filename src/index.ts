@@ -14,7 +14,11 @@ export interface ChatManager {
 
   createChat(chatName: string): Promise<void>;
 
-  sendMessage(chatName: string, message: string): Promise<void>;
+  sendMessage(
+    chatName: string,
+    message: string,
+    parentId?: string
+  ): Promise<void>;
 
   getMessages(chatName: string): Promise<ChatMessage[]>;
 
@@ -22,6 +26,8 @@ export interface ChatManager {
 }
 
 export type ChatMessage = {
+  id: string;
+  parentId: string;
   sender: string;
   message: string;
   timestamp: number;
