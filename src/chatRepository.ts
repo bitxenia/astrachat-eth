@@ -52,7 +52,7 @@ class ChatRepository {
   async sendMessage(
     chatName: string,
     message: string,
-    parentId?: string
+    parentId?: string,
   ): Promise<void> {
     const chatContractInstance = await this.buildChatContractInstance(chatName);
 

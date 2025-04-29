@@ -17,7 +17,7 @@ export interface ChatManager {
   sendMessage(
     chatName: string,
     message: string,
-    parentId?: string
+    parentId?: string,
   ): Promise<void>;
 
   getMessages(chatName: string): Promise<ChatMessage[]>;
