@@ -2,13 +2,11 @@ import web3 from "./web3";
 import chatFactoryContractABI from "../contracts/out/ChatFactory.json";
 import chatContractABI from "../contracts/out/Chat.json";
 import chatFactoryContractAddress from "../contracts/out/deployedAddress.json";
-import { ChatMessage } from ".";
+import { ChatMessage } from "./index";
+import { NULL_ADDRESS } from "./constants";
 
 class ChatRepository {
   chatFactoryInstance: any;
-
-  NULL_PARENT_ID =
-    "0x0000000000000000000000000000000000000000000000000000000000000000";
 
   constructor() {
     this.chatFactoryInstance = new web3.eth.Contract(
@@ -27,7 +25,7 @@ class ChatRepository {
       const { id, parentId, sender, content, timestamp } = event.returnValues;
       callback({
         id,
-        parentId: parentId === this.NULL_PARENT_ID ? undefined : parentId,
+        parentId: parentId === NULL_ADDRESS ? undefined : parentId,
         sender,
         message: content,
         timestamp: Number(timestamp),
@@ -44,7 +42,7 @@ class ChatRepository {
     return messages.map((message: any) => ({
       id: message.id,
       parentId:
-        message.parentId === this.NULL_PARENT_ID ? undefined : message.parentId,
+        message.parentId === NULL_ADDRESS ? undefined : message.parentId,
       sender: message.sender,
       message: message.content,
       timestamp: message.timestamp,
@@ -61,7 +59,7 @@ class ChatRepository {
     const accounts = await web3.eth.getAccounts();
 
     // Use the default value for bytes32 if parentId is not provided
-    const parentIdBytes32 = parentId || this.NULL_PARENT_ID;
+    const parentIdBytes32 = parentId || NULL_ADDRESS;
 
     await chatContractInstance.methods
       .sendMessage(message, parentIdBytes32)
