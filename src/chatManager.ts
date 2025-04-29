@@ -20,7 +20,7 @@ class ChatManagerImpl implements ChatManager {
   }
 
   async createChat(chatName: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    this.chatRepository.createChat(chatName);
   }
 
   async sendMessage(chatName: string, message: string): Promise<void> {
