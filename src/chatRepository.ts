@@ -13,13 +13,13 @@ class ChatRepository {
   constructor() {
     this.chatFactoryInstance = new web3.eth.Contract(
       chatFactoryContractABI,
-      chatFactoryContractAddress
+      chatFactoryContractAddress,
     );
   }
 
   async listenToNewMessages(
     chatName: string,
-    callback: (message: ChatMessage) => void
+    callback: (message: ChatMessage) => void,
   ): Promise<void> {
     const chatContractInstance = await this.buildChatContractInstance(chatName);
 
@@ -74,7 +74,7 @@ class ChatRepository {
       .call();
     const chatContractInstance = new web3.eth.Contract(
       chatContractABI,
-      chatAddress
+      chatAddress,
     );
     return chatContractInstance;
   }
