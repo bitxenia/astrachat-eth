@@ -23,13 +23,19 @@ class ChatManagerImpl implements ChatManager {
     this.chatRepository.createChat(chatName);
   }
 
-  async sendMessage(chatName: string, message: string): Promise<void> {
-    await this.chatRepository.sendMessage(chatName, message);
+  async sendMessage(
+    chatName: string,
+    message: string,
+    parentId?: string,
+  ): Promise<void> {
+    await this.chatRepository.sendMessage(chatName, message, parentId);
   }
 
   async getMessages(chatName: string): Promise<ChatMessage[]> {
     const messages = await this.chatRepository.getMessages(chatName);
     return messages.map((message: any) => ({
+      id: message.id,
+      parentId: message.parentId,
       sender: message.sender,
       message: message.message,
       timestamp: Number(message.timestamp),
