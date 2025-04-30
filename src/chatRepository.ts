@@ -14,6 +14,14 @@ class ChatRepository {
     );
   }
 
+  async createChat(chatName: string): Promise<void> {
+    const accounts = await web3.eth.getAccounts();
+
+    await this.chatFactoryInstance.methods
+      .createChat(chatName)
+      .send({ from: accounts[0] });
+  }
+
   async listenToNewMessages(
     chatName: string,
     callback: (message: ChatMessage) => void,
