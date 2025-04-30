@@ -1,6 +1,6 @@
 {
   "name": "@bitxenia/astrachat-eth",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Astrachat implementation on Ethereum",
   "author": "Bitxenia",
   "license": "MIT",
