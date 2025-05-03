@@ -22,7 +22,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write .",
     "prepare": "husky",
-    "publish:local": "npm run compile-contracts && npm run deploy-contracts && npm run build && npm publish --registry http://localhost:4873"
+    "publish:local": "npm run compile-contracts && npm run deploy-contracts && npm run build && npm publish --registry http://localhost:4873",
+    "dev": "npm run compile-contracts && npm run deploy-contracts && npm run build"
   },
   "devDependencies": {
     "dotenv": "^16.5.0",
