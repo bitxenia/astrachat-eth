@@ -8,6 +8,7 @@ contract ChatFactory {
     string[] public chatNames;
     mapping(string => address) public chatNameToAddress;
     mapping(address => string) public walletAddressToAlias;
+    mapping(string => address) public aliasToWalletAddress;
 
     function createChat(string memory _name) public {
         require(
@@ -23,11 +24,19 @@ contract ChatFactory {
 
     function setAlias(string memory _alias) public {
         require(
-            bytes(walletAddressToAlias[msg.sender]).length == 0,
-            "Alias already exists"
+            aliasToWalletAddress[_alias] == address(0),
+            "Alias already taken"
         );
         require(bytes(_alias).length > 0, "Alias cannot be empty");
+
+        string memory currentAlias = walletAddressToAlias[msg.sender];
         walletAddressToAlias[msg.sender] = _alias;
+        aliasToWalletAddress[_alias] = msg.sender;
+
+        // Clear the previous alias if it exists
+        if (bytes(currentAlias).length > 0) {
+            delete aliasToWalletAddress[currentAlias];
+        }
     }
 
     function getAlias(

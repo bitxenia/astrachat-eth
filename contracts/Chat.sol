@@ -58,14 +58,15 @@ contract Chat {
         uint256 messageCount = messages.length;
         Message[] memory allMessages = new Message[](messageCount);
         for (uint256 i = 0; i < messageCount; i++) {
-            // Copy the message to the new array without referencing the original
-            allMessages[i].id = messages[i].id;
-            allMessages[i].parentId = messages[i].parentId;
-            allMessages[i].sender = messages[i].sender;
-            allMessages[i].content = messages[i].content;
-            allMessages[i].timestamp = messages[i].timestamp;
-            // Update the senderAlias for each message without modifying the original
-            allMessages[i].senderAlias = factory.getAlias(messages[i].sender);
+            Message memory tempMessage = Message({
+                id: messages[i].id,
+                parentId: messages[i].parentId,
+                sender: messages[i].sender,
+                senderAlias: factory.getAlias(messages[i].sender),
+                content: messages[i].content,
+                timestamp: messages[i].timestamp
+            });
+            allMessages[i] = tempMessage;
         }
         return allMessages;
     }
