@@ -4,8 +4,12 @@ import ChatRepository from "./chatRepository";
 class ChatManagerImpl implements ChatManager {
   chatRepository: ChatRepository;
 
-  constructor() {
+  constructor(account?: string) {
     this.chatRepository = new ChatRepository();
+  }
+
+  async setAccount(account?: string): Promise<void> {
+    this.chatRepository.setAccount(account);
   }
 
   async start(): Promise<void> {

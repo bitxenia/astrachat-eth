@@ -1,12 +1,12 @@
 {
   "name": "@bitxenia/astrachat-eth",
-  "version": "0.0.3",
+  "version": "0.0.5-rc2",
   "description": "Astrachat implementation on Ethereum",
   "author": "Bitxenia",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bitxenia/astrachat-eth"
+    "url": "git+https://github.com/bitxenia/astrachat-eth.git"
   },
   "engines": {
     "node": ">=20.0.0"
@@ -22,7 +22,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write .",
     "prepare": "husky",
-    "publish:local": "npm run compile-contracts && npm run deploy-contracts && npm run build && npm publish --registry http://localhost:4873"
+    "publish:local": "npm run compile-contracts && npm run deploy-contracts && npm run build && npm publish --registry http://localhost:4873 --tag next",
+    "dev": "npm run compile-contracts && npm run deploy-contracts && npm run build"
   },
   "devDependencies": {
     "dotenv": "^16.5.0",
