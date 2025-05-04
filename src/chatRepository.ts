@@ -7,7 +7,7 @@ import { NULL_ADDRESS } from "./constants";
 
 class ChatRepository {
   chatFactoryInstance: any;
-  account: string;
+  account: string | null;
 
   constructor() {
     this.chatFactoryInstance = new web3.eth.Contract(
@@ -19,18 +19,25 @@ class ChatRepository {
   async setAccount(account?: string) {
     if (account !== undefined && account !== null && account !== "") {
       this.account = account;
-    } else {
-      const acc = await web3.eth.getAccounts();
-      this.account = acc[0];
     }
   }
 
-  async createChat(chatName: string): Promise<void> {
+  async getAccount(): Promise<string> {
+    if (this.account) {
+      return this.account;
+    }
+
     const accounts = await web3.eth.getAccounts();
+
+    return accounts[0];
+  }
+
+  async createChat(chatName: string): Promise<void> {
+    const account = await this.getAccount();
 
     await this.chatFactoryInstance.methods
       .createChat(chatName)
-      .send({ from: this.account });
+      .send({ from: account });
   }
 
   async listenToNewMessages(
@@ -73,28 +80,27 @@ class ChatRepository {
     parentId?: string,
   ): Promise<void> {
     const chatContractInstance = await this.buildChatContractInstance(chatName);
-
-    // const accounts = await web3.eth.getAccounts();
+    const account = await this.getAccount();
 
     // Use the default value for bytes32 if parentId is not provided
     const parentIdBytes32 = parentId || NULL_ADDRESS;
 
     await chatContractInstance.methods
       .sendMessage(message, parentIdBytes32)
-      .send({ from: this.account });
+      .send({ from: account });
   }
 
   async setAlias(alias: string) {
-    // const accounts = await web3.eth.getAccounts();
+    const account = await this.getAccount();
 
     await this.chatFactoryInstance.methods
       .setAlias(alias)
-      .send({ from: this.account });
+      .send({ from: account });
   }
 
   async getAlias(): Promise<string> {
-    // const accounts = await web3.eth.getAccounts();
-    return await this.chatFactoryInstance.methods.getAlias(this.account).call();
+    const account = await this.getAccount();
+    return await this.chatFactoryInstance.methods.getAlias(account).call();
   }
 
   private async buildChatContractInstance(chatName: string) {
