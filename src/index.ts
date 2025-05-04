@@ -22,6 +22,10 @@ export interface ChatManager {
 
   getMessages(chatName: string): Promise<ChatMessage[]>;
 
+  setAlias(alias: string): Promise<void>;
+
+  getAlias(): Promise<string>;
+
   getChatNames(): Promise<string[]>;
 }
 
@@ -29,6 +33,7 @@ export type ChatMessage = {
   id: string;
   parentId: string;
   sender: string;
+  senderAlias: string;
   message: string;
   timestamp: number;
 };

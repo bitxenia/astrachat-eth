@@ -30,11 +30,13 @@ class ChatRepository {
     const chatContractInstance = await this.buildChatContractInstance(chatName);
 
     chatContractInstance.events.MessageSent().on("data", (event: any) => {
-      const { id, parentId, sender, content, timestamp } = event.returnValues;
+      const { id, parentId, sender, senderAlias, content, timestamp } =
+        event.returnValues;
       callback({
         id,
         parentId: parentId === NULL_ADDRESS ? undefined : parentId,
         sender,
+        senderAlias,
         message: content,
         timestamp: Number(timestamp),
       });
@@ -52,6 +54,7 @@ class ChatRepository {
       parentId:
         message.parentId === NULL_ADDRESS ? undefined : message.parentId,
       sender: message.sender,
+      senderAlias: message.senderAlias,
       message: message.content,
       timestamp: message.timestamp,
     }));
@@ -72,6 +75,19 @@ class ChatRepository {
     await chatContractInstance.methods
       .sendMessage(message, parentIdBytes32)
       .send({ from: accounts[0] });
+  }
+
+  async setAlias(alias: string) {
+    const accounts = await web3.eth.getAccounts();
+
+    await this.chatFactoryInstance.methods
+      .setAlias(alias)
+      .send({ from: accounts[0] });
+  }
+
+  async getAlias(): Promise<string> {
+    const accounts = await web3.eth.getAccounts();
+    return await this.chatFactoryInstance.methods.getAlias(accounts[0]).call();
   }
 
   private async buildChatContractInstance(chatName: string) {
