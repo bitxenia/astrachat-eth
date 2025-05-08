@@ -106,19 +106,6 @@ class ChatRepository {
     return await this.chatFactoryInstance.methods.getAlias(account).call();
   }
 
-  async setAlias(alias: string) {
-    const accounts = await web3.eth.getAccounts();
-
-    await this.chatFactoryInstance.methods
-      .setAlias(alias)
-      .send({ from: accounts[0] });
-  }
-
-  async getAlias(): Promise<string> {
-    const accounts = await web3.eth.getAccounts();
-    return await this.chatFactoryInstance.methods.getAlias(accounts[0]).call();
-  }
-
   private async buildChatContractInstance(chatName: string) {
     const chatAddress = await this.chatFactoryInstance.methods
       .chatNameToAddress(chatName)
