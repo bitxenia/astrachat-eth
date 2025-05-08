@@ -41,9 +41,18 @@ class ChatManagerImpl implements ChatManager {
       id: message.id,
       parentId: message.parentId,
       sender: message.sender,
+      senderAlias: message.senderAlias,
       message: message.message,
       timestamp: Number(message.timestamp),
     }));
+  }
+
+  async setAlias(alias: string): Promise<void> {
+    await this.chatRepository.setAlias(alias);
+  }
+
+  async getAlias(): Promise<string> {
+    return await this.chatRepository.getAlias();
   }
 
   async getChatNames(): Promise<string[]> {
