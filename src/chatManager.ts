@@ -54,6 +54,10 @@ class ChatManagerImpl implements ChatManager {
   async getChatNames(): Promise<string[]> {
     throw new Error("Method not implemented.");
   }
+
+  stop(): Promise<void> {
+    return this.chatRepository.stop();
+  }
 }
 
 export default ChatManagerImpl;

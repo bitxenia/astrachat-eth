@@ -100,6 +100,10 @@ class ChatRepository {
     );
     return chatContractInstance;
   }
+
+  async stop(): Promise<void> {
+    web3.eth.provider.disconnect();
+  }
 }
 
 export default ChatRepository;
