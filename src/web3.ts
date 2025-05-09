@@ -8,6 +8,7 @@ declare global {
   }
 }
 
+// This endpoint is only for local
 const INFURA_ENDPOINT =
   process.env.ETH_ENV == "test"
     ? `ws://localhost:8545`
