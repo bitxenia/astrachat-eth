@@ -24,7 +24,7 @@ class ChatManagerImpl implements ChatManager {
   }
 
   async createChat(chatName: string): Promise<void> {
-    this.chatRepository.createChat(chatName);
+    return this.chatRepository.createChat(chatName);
   }
 
   async sendMessage(
