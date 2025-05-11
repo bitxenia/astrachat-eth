@@ -4,7 +4,7 @@ import ChatRepository from "./chatRepository";
 class ChatManagerImpl implements ChatManager {
   chatRepository: ChatRepository;
 
-  constructor(account?: string) {
+  constructor() {
     this.chatRepository = new ChatRepository();
   }
 
