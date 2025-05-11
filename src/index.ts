@@ -1,7 +1,11 @@
 import ChatManagerImpl from "./chatManager";
 
-export async function createChatManager(): Promise<ChatManager> {
-  return new ChatManagerImpl();
+export async function createChatManager(
+  account?: string,
+): Promise<ChatManager> {
+  const chatManager = new ChatManagerImpl();
+  chatManager.setAccount(account);
+  return chatManager;
 }
 
 export interface ChatManager {

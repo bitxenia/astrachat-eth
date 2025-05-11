@@ -8,6 +8,10 @@ class ChatManagerImpl implements ChatManager {
     this.chatRepository = new ChatRepository();
   }
 
+  async setAccount(account?: string): Promise<void> {
+    this.chatRepository.setAccount(account);
+  }
+
   async start(): Promise<void> {
     throw new Error("Method not implemented.");
   }
