@@ -23,7 +23,6 @@ describe("Chat with many messages", () => {
     "measure time for sending messages in chat with 1000 messages",
     async () => {
       const messageAmountBefore = (await node.getMessages(CHAT_NAME)).length;
-
       const message = "Lorem ipsum";
       const durations: number[] = [];
       const samplesAmount = 1000;
@@ -75,6 +74,37 @@ describe("Chat with many messages", () => {
       }
 
       saveMetrics(durations, `measure_get_messages_with_many_messages_sent`);
+    },
+    TEN_MINUTES_TIMEOUT,
+  );
+
+  test(
+    "measure time for receiving messages",
+    async () => {
+      const ends = [];
+      const starts = [];
+      const samplesAmount = 1000;
+      const message = "Lorem ipsum.";
+
+      const listener = (_message: ChatMessage) => {
+        ends.push(performance.now());
+      };
+
+      await node.listenToNewMessages(CHAT_NAME, listener);
+
+      for (let i = 0; i < samplesAmount; i++) {
+        starts.push(performance.now());
+        await node.sendMessage(CHAT_NAME, message);
+      }
+
+      const durations = [];
+
+      for (let i = 0; i < starts.length; i++) {
+        const duration = ends[i] - starts[i];
+        durations.push(duration);
+      }
+
+      saveMetrics(durations, `measure_time_between_send_and_recv_message`);
     },
     TEN_MINUTES_TIMEOUT,
   );
