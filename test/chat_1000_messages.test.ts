@@ -99,6 +99,8 @@ describe("Chat with many messages", () => {
 
       const durations = [];
 
+      expect(ends.length).toBe(starts.length);
+
       for (let i = 0; i < starts.length; i++) {
         const duration = ends[i] - starts[i];
         durations.push(duration);
