@@ -110,4 +110,44 @@ describe("Chat with many messages", () => {
     },
     TEN_MINUTES_TIMEOUT,
   );
+
+  test(
+    "measure time for receiving messages from other user",
+    async () => {
+      const ANOTHER_ACCOUNT = "0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199";
+      const other_node = await createChatManager(ANOTHER_ACCOUNT);
+      const starts = [];
+      const ends = [];
+      const samplesAmount = 1000;
+      const message = "Lorem ipsum.";
+
+      const listener = (_message: ChatMessage) => {
+        ends.push(performance.now());
+      };
+
+      await other_node.listenToNewMessages(CHAT_NAME, listener);
+
+      for (let i = 0; i < samplesAmount; i++) {
+        starts.push(performance.now());
+        await node.sendMessage(CHAT_NAME, message);
+      }
+
+      const durations = [];
+
+      expect(ends.length).toBe(starts.length);
+
+      for (let i = 0; i < starts.length; i++) {
+        const duration = ends[i] - starts[i];
+        durations.push(duration);
+      }
+
+      saveMetrics(
+        durations,
+        `measure_time_between_send_and_recv_message_between_different_users`,
+      );
+
+      other_node.stop();
+    },
+    TEN_MINUTES_TIMEOUT,
+  );
 });
