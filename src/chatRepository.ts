@@ -35,9 +35,13 @@ class ChatRepository {
   async createChat(chatName: string): Promise<void> {
     const account = await this.getAccount();
 
-    await this.chatFactoryInstance.methods
+    const result = await this.chatFactoryInstance.methods
       .createChat(chatName)
       .send({ from: account });
+
+    if (!result) {
+      return Promise.reject("Failed creating chat");
+    }
   }
 
   async listenToNewMessages(
@@ -115,6 +119,10 @@ class ChatRepository {
       chatAddress,
     );
     return chatContractInstance;
+  }
+
+  async stop(): Promise<void> {
+    web3.eth.provider.disconnect();
   }
 }
 

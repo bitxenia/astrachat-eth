@@ -31,6 +31,8 @@ export interface ChatManager {
   getAlias(): Promise<string>;
 
   getChatNames(): Promise<string[]>;
+
+  stop(): Promise<void>;
 }
 
 export type ChatMessage = {

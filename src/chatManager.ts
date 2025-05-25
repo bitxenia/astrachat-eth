@@ -4,7 +4,7 @@ import ChatRepository from "./chatRepository";
 class ChatManagerImpl implements ChatManager {
   chatRepository: ChatRepository;
 
-  constructor() {
+  constructor(account?: string) {
     this.chatRepository = new ChatRepository();
   }
 
@@ -24,7 +24,7 @@ class ChatManagerImpl implements ChatManager {
   }
 
   async createChat(chatName: string): Promise<void> {
-    this.chatRepository.createChat(chatName);
+    return this.chatRepository.createChat(chatName);
   }
 
   async sendMessage(
@@ -57,6 +57,10 @@ class ChatManagerImpl implements ChatManager {
 
   async getChatNames(): Promise<string[]> {
     throw new Error("Method not implemented.");
+  }
+
+  stop(): Promise<void> {
+    return this.chatRepository.stop();
   }
 }
 
