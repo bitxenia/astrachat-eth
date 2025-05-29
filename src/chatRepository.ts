@@ -1,16 +1,19 @@
-import web3 from "./web3";
+import { Web3Singleton } from "./web3";
 import chatFactoryContractABI from "../contracts/out/ChatFactory.json";
 import chatContractABI from "../contracts/out/Chat.json";
 import chatFactoryContractAddress from "../contracts/out/deployedAddress.json";
 import { ChatMessage } from "./index";
 import { NULL_ADDRESS } from "./constants";
+import Web3 from "web3";
 
 class ChatRepository {
   chatFactoryInstance: any;
   account: string | null;
+  web3: Web3;
 
   constructor() {
-    this.chatFactoryInstance = new web3.eth.Contract(
+    this.web3 = Web3Singleton.instance;
+    this.chatFactoryInstance = new this.web3.eth.Contract(
       chatFactoryContractABI,
       chatFactoryContractAddress,
     );
@@ -27,7 +30,7 @@ class ChatRepository {
       return this.account;
     }
 
-    const accounts = await web3.eth.getAccounts();
+    const accounts = await this.web3.eth.getAccounts();
 
     return accounts[0];
   }
@@ -114,7 +117,7 @@ class ChatRepository {
     const chatAddress = await this.chatFactoryInstance.methods
       .chatNameToAddress(chatName)
       .call();
-    const chatContractInstance = new web3.eth.Contract(
+    const chatContractInstance = new this.web3.eth.Contract(
       chatContractABI,
       chatAddress,
     );
@@ -122,7 +125,7 @@ class ChatRepository {
   }
 
   async stop(): Promise<void> {
-    web3.eth.provider.disconnect();
+    this.web3.eth.provider.disconnect();
   }
 }
 
