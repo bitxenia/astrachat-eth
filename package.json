@@ -31,14 +31,15 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.6",
     "eslint-config-prettier": "^10.0.1",
-    "hardhat": "^2.24.0",
+    "hardhat": "^0.0.7",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.1",
     "prettier-plugin-tailwindcss": "^0.6.10",
-    "ts-jest": "^29.3.2",
+    "ts-jest": "^29.3.4",
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@metamask/providers": "^22.1.0",
     "web3": "^4.16.0"
   },
   "publishConfig": {

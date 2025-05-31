@@ -5,7 +5,7 @@ import * as fs from "fs";
  * @param results - the metrics to save
  * @param filename - the name of the file to save the metrics to
  */
-export const saveMetrics = (results: number[], filename: string) => {
+export const saveMetrics = <T>(results: T[], filename: string) => {
   const metricsDir = `${__dirname}/../../metrics`;
   if (!fs.existsSync(metricsDir)) {
     fs.mkdirSync(metricsDir);
@@ -14,7 +14,12 @@ export const saveMetrics = (results: number[], filename: string) => {
     .toISOString()
     .replace(/:/g, "-")
     .replace(/\..+/, "");
+
   const fullFilename = `${metricsDir}/${filename}_${timeStamp}.json`;
-  fs.writeFileSync(fullFilename, JSON.stringify(results, null, 2));
+
+  const replacer = (_key: string, value: T) =>
+    typeof value === "bigint" ? value.toString() : value;
+
+  fs.writeFileSync(fullFilename, JSON.stringify(results, replacer, 2));
   console.log(`Metrics written to ${fullFilename}`);
 };

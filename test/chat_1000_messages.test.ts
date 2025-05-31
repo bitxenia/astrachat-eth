@@ -9,7 +9,7 @@ describe("Chat with many messages", () => {
   const CHAT_NAME = "test";
 
   beforeAll(async () => {
-    node = await createChatManager(ACCOUNT);
+    node = await createChatManager(ACCOUNT, true);
     await node.createChat(CHAT_NAME).catch((_err) => {
       /* Do nothing */
     });
@@ -53,6 +53,13 @@ describe("Chat with many messages", () => {
       saveMetrics(
         durations,
         `measure_chat_with_${samplesAmount}_messages_sent`,
+      );
+
+      const metrics = node.getMetrics();
+      const result = metrics.getResults();
+      saveMetrics(
+        result.gasUsed,
+        `measure_gas_used_chat_with_${samplesAmount}_messages_sent`,
       );
     },
     TEN_MINUTES_TIMEOUT,

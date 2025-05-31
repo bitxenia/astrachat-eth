@@ -1,11 +1,17 @@
 import { ChatManager, ChatMessage } from ".";
 import ChatRepository from "./chatRepository";
+import TransactionMetrics from "./transactionMetrics";
 
 class ChatManagerImpl implements ChatManager {
   chatRepository: ChatRepository;
+  transactionMetrics: TransactionMetrics | null;
 
-  constructor(account?: string) {
-    this.chatRepository = new ChatRepository();
+  constructor(calculateMetrics?: boolean) {
+    if (calculateMetrics) {
+      this.transactionMetrics = new TransactionMetrics();
+    }
+
+    this.chatRepository = new ChatRepository(this.transactionMetrics);
   }
 
   async setAccount(account?: string): Promise<void> {
@@ -59,6 +65,9 @@ class ChatManagerImpl implements ChatManager {
     throw new Error("Method not implemented.");
   }
 
+  getMetrics(): TransactionMetrics {
+    return this.transactionMetrics;
+  }
   stop(): Promise<void> {
     return this.chatRepository.stop();
   }

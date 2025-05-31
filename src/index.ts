@@ -1,9 +1,11 @@
 import ChatManagerImpl from "./chatManager";
+import TransactionMetrics from "./transactionMetrics";
 
 export async function createChatManager(
   account?: string,
+  calculateMetrics?: boolean,
 ): Promise<ChatManager> {
-  const chatManager = new ChatManagerImpl();
+  const chatManager = new ChatManagerImpl(calculateMetrics);
   chatManager.setAccount(account);
   return chatManager;
 }
@@ -31,6 +33,8 @@ export interface ChatManager {
   getAlias(): Promise<string>;
 
   getChatNames(): Promise<string[]>;
+
+  getMetrics(): TransactionMetrics;
 
   stop(): Promise<void>;
 }

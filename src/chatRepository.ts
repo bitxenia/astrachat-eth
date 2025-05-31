@@ -5,18 +5,24 @@ import chatFactoryContractAddress from "../contracts/out/deployedAddress.json";
 import { ChatMessage } from "./index";
 import { NULL_ADDRESS } from "./constants";
 import Web3 from "web3";
+import TransactionMetrics from "./transactionMetrics";
 
 class ChatRepository {
   chatFactoryInstance: any;
   account: string | null;
   web3: Web3;
+  transactionMetrics: TransactionMetrics | null;
 
-  constructor() {
+  constructor(transactionMetrics?: TransactionMetrics) {
     this.web3 = Web3Singleton.instance;
     this.chatFactoryInstance = new this.web3.eth.Contract(
       chatFactoryContractABI,
       chatFactoryContractAddress,
     );
+
+    if (transactionMetrics) {
+      this.transactionMetrics = transactionMetrics;
+    }
   }
 
   async setAccount(account?: string) {
@@ -95,9 +101,11 @@ class ChatRepository {
     // Use the default value for bytes32 if parentId is not provided
     const parentIdBytes32 = parentId || NULL_ADDRESS;
 
-    await chatContractInstance.methods
+    const tx = await chatContractInstance.methods
       .sendMessage(message, parentIdBytes32)
       .send({ from: account });
+
+    this.transactionMetrics?.recordTransaction(tx);
   }
 
   async setAlias(alias: string) {
