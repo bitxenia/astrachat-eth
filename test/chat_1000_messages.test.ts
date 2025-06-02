@@ -4,33 +4,38 @@ import { saveMetrics } from "./utils";
 describe("Chat with many messages", () => {
   let node: ChatManager;
 
+  const MESSAGE = "Lorem ipsum";
   const TEN_MINUTES_TIMEOUT = 1000 * 60 * 10;
-  const ACCOUNT = "0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199";
-  const CHAT_NAME = "test";
+  const SAMPLES_AMOUNT = 1000;
+  const ACCOUNT = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 
   beforeAll(async () => {
     node = await createChatManager(ACCOUNT, true);
-    await node.createChat(CHAT_NAME).catch((_err) => {
-      /* Do nothing */
-    });
   });
 
   afterAll(async () => {
     node.stop();
   });
 
+  const createChat = async (chatName: string) => {
+    await node.createChat(chatName).catch((_err) => {
+      /* Do nothing */
+    });
+  };
+
   test(
     "measure time for sending messages in chat with 1000 messages",
     async () => {
-      const messageAmountBefore = (await node.getMessages(CHAT_NAME)).length;
-      const message = "Lorem ipsum";
+      const chatName =
+        "measure time for sending messages in chat with 1000 messages";
+      await createChat(chatName);
+      const messageAmountBefore = (await node.getMessages(chatName)).length;
       const durations: number[] = [];
-      const samplesAmount = 1000;
 
-      for (let i = 0; i < samplesAmount; i++) {
+      for (let i = 0; i < SAMPLES_AMOUNT; i++) {
         try {
           const start = performance.now();
-          await node.sendMessage(CHAT_NAME, message);
+          await node.sendMessage(chatName, MESSAGE);
           const end = performance.now();
           const duration = end - start;
           durations.push(duration);
@@ -39,27 +44,27 @@ describe("Chat with many messages", () => {
         }
       }
 
-      const messages = await node.getMessages(CHAT_NAME);
+      const messages = await node.getMessages(chatName);
       const amountNewMessages = messages.length - messageAmountBefore;
       // Check for delta, so there is no need to re-deploy the contract each time
-      expect(amountNewMessages).toBe(samplesAmount);
+      expect(amountNewMessages).toBe(SAMPLES_AMOUNT);
 
       for (let i = amountNewMessages; i < messages.length; i++) {
-        expect(messages[i].message).toBe(message);
+        expect(messages[i].message).toBe(MESSAGE);
         expect(messages[i].sender).toBe(ACCOUNT);
       }
 
-      expect(durations.length).toBe(samplesAmount);
+      expect(durations.length).toBe(SAMPLES_AMOUNT);
       saveMetrics(
         durations,
-        `measure_chat_with_${samplesAmount}_messages_sent`,
+        `measure_chat_with_${SAMPLES_AMOUNT}_messages_sent`,
       );
 
       const metrics = node.getMetrics();
       const result = metrics.getResults();
       saveMetrics(
         result.gasUsed,
-        `measure_gas_used_chat_with_${samplesAmount}_messages_sent`,
+        `measure_gas_used_chat_with_${SAMPLES_AMOUNT}_messages_sent`,
       );
     },
     TEN_MINUTES_TIMEOUT,
@@ -68,12 +73,14 @@ describe("Chat with many messages", () => {
   test(
     "measure time for getting many messages",
     async () => {
-      const samplesAmount = 1000;
+      const chatName = "measure time for getting many messages";
+      await createChat(chatName);
       const durations = [];
 
-      for (let i = 0; i < samplesAmount; i++) {
+      for (let i = 0; i < SAMPLES_AMOUNT; i++) {
+        await node.sendMessage(chatName, MESSAGE).catch((_err) => {});
         const start = performance.now();
-        const messages = await node.getMessages(CHAT_NAME);
+        const messages = await node.getMessages(chatName);
         const end = performance.now();
         const duration = end - start;
         durations.push(duration);
@@ -88,20 +95,22 @@ describe("Chat with many messages", () => {
   test(
     "measure time for receiving messages",
     async () => {
+      const chatName = "measure time for receiving messages";
+      await createChat(chatName);
       const ends = [];
       const starts = [];
-      const samplesAmount = 1000;
+
       const message = "Lorem ipsum.";
 
       const listener = (_message: ChatMessage) => {
         ends.push(performance.now());
       };
 
-      await node.listenToNewMessages(CHAT_NAME, listener);
+      await node.listenToNewMessages(chatName, listener);
 
-      for (let i = 0; i < samplesAmount; i++) {
+      for (let i = 0; i < SAMPLES_AMOUNT; i++) {
         starts.push(performance.now());
-        await node.sendMessage(CHAT_NAME, message);
+        await node.sendMessage(chatName, message);
       }
 
       const durations = [];
@@ -121,22 +130,24 @@ describe("Chat with many messages", () => {
   test(
     "measure time for receiving messages from other user",
     async () => {
+      const chatName = "measure time for receiving messages from other user";
+      await createChat(chatName);
       const ANOTHER_ACCOUNT = "0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199";
       const other_node = await createChatManager(ANOTHER_ACCOUNT);
       const starts = [];
       const ends = [];
-      const samplesAmount = 1000;
+
       const message = "Lorem ipsum.";
 
       const listener = (_message: ChatMessage) => {
         ends.push(performance.now());
       };
 
-      await other_node.listenToNewMessages(CHAT_NAME, listener);
+      await other_node.listenToNewMessages(chatName, listener);
 
-      for (let i = 0; i < samplesAmount; i++) {
+      for (let i = 0; i < SAMPLES_AMOUNT; i++) {
         starts.push(performance.now());
-        await node.sendMessage(CHAT_NAME, message);
+        await node.sendMessage(chatName, message);
       }
 
       const durations = [];
